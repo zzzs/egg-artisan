@@ -9,12 +9,12 @@
 
 [npm-image]: https://img.shields.io/npm/v/egg-artisan.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/egg-artisan
-[travis-image]: https://img.shields.io/travis/eggjs/egg-artisan.svg?style=flat-square
-[travis-url]: https://travis-ci.org/eggjs/egg-artisan
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-artisan.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-artisan?branch=master
-[david-image]: https://img.shields.io/david/eggjs/egg-artisan.svg?style=flat-square
-[david-url]: https://david-dm.org/eggjs/egg-artisan
+[travis-image]: https://img.shields.io/travis/zzzs/egg-artisan.svg?style=flat-square
+[travis-url]: https://travis-ci.org/zzzs/egg-artisan
+[codecov-image]: https://img.shields.io/codecov/c/github/zzzs/egg-artisan.svg?style=flat-square
+[codecov-url]: https://codecov.io/github/zzzs/egg-artisan?branch=master
+[david-image]: https://img.shields.io/david/zzzs/egg-artisan.svg?style=flat-square
+[david-url]: https://david-dm.org/zzzs/egg-artisan
 [snyk-image]: https://snyk.io/test/npm/egg-artisan/badge.svg?style=flat-square
 [snyk-url]: https://snyk.io/test/npm/egg-artisan
 [download-image]: https://img.shields.io/npm/dm/egg-artisan.svg?style=flat-square
@@ -56,7 +56,7 @@ see [config/config.default.js](config/config.default.js) for more detail.
 
 ## Questions & Suggestions
 
-Please open an issue [here](https://github.com/eggjs/egg/issues).
+Please open an issue [here](https://github.com/zzzs/egg/issues).
 
 ## License
 
