@@ -36,6 +36,9 @@
     "pkgfiles": "egg-bin pkgfiles",
     "autod": "autod"
   },
+  "bin": {
+    "egg-artisan": "bin/egg-artisan.js"
+  },
   "files": [
     "app.js",
     "agent.js",
