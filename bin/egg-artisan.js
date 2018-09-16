@@ -1,4 +1,6 @@
 'use strict';
 
-const Command = require('..');
-new Command().start();
+const getMainCommand = require('../main');
+getMainCommand().then(MainCommand => {
+    new MainCommand().start();
+})
