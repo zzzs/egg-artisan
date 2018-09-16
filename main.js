@@ -34,6 +34,7 @@ async function getMainCommand() {
 
           let target = require(path.join(fullPath, file));
           target.prototype.app = app;
+
           this.add(name, target);
         }
       }
