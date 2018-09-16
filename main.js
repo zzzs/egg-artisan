@@ -33,7 +33,7 @@ async function getMainCommand() {
           names.push(name);
 
           let target = require(path.join(fullPath, file));
-          target.prototype.app = app;
+          target.prototype.ctx = app.mockContext();
 
           this.add(name, target);
         }
