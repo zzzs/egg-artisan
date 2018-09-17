@@ -11,7 +11,8 @@
     "egg-plugin"
   ],
   "dependencies": {
-    "common-bin": "^2.7.3"
+    "common-bin": "^2.7.3",
+    "is-type-of": "^1.2.0"
   },
   "devDependencies": {
     "autod": "^3.0.0",
