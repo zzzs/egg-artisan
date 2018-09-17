@@ -8,9 +8,8 @@ module.exports = app => {
     if (!path.isAbsolute(artisanPath)) {
       artisanPath = path.join(app.config.baseDir, 'app/artisan', artisanPath);
     }
-    const artisanClass = require.resolve(artisanPath);
+    let artisanClass = require.resolve(artisanPath);
     artisanClass = require(artisanClass);
-    console.log(artisanClass)
     let rawArgv = artisanPath.split(' ');
     rawArgv[0] = path.basename(rawArgv[0]);
     if (argvs) {
@@ -29,7 +28,7 @@ module.exports = app => {
     }
 
     const artisanObj = new artisanClass(argvs);
-    artisanObj.ctx = app.ctx;
-    await artisanObj.run(artisanObj.context);
+    artisanObj.ctx = app.createAnonymousContext();
+    await artisanObj.run(artisanObj.ctx);
   };
 };
