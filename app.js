@@ -29,6 +29,6 @@ module.exports = app => {
 
     const artisanObj = new artisanClass(argvs);
     artisanObj.ctx = app.createAnonymousContext();
-    await artisanObj.run(artisanObj.ctx);
+    await artisanObj.run(artisanObj.context);
   };
 };
