@@ -8,9 +8,9 @@ module.exports = app => {
     let rawArgv = artisanPath.split(' ');
     rawArgv = rawArgv.filter(item => item !== '');
 
-    rawArgv[0] = path.basename(rawArgv[0]);
+    artisanPath = rawArgv.shift();
+    artisanPath = path.basename(artisanPath);
 
-    artisanPath = rawArgv[0];
     if (!path.isAbsolute(artisanPath)) {
       artisanPath = path.join(app.config.baseDir, 'app/artisan', artisanPath);
     }
@@ -18,16 +18,26 @@ module.exports = app => {
     artisanClass = require(artisanClass);
     if (argvs) {
       if (is.array(argvs)) {
-        array.forEach(item => {
+        argvs.forEach(item => {
           rawArgv.push(item);
         });
       } else if (is.object(argvs)) {
         for (let item in argvs) {
-          rawArgv.push(item);
-          rawArgv.push(argvs[item]);
+          if (is.boolean(argvs[item])) {
+            if (argvs[item]) {
+              rawArgv.push(item);
+            }
+          } else {
+            if (item.indexOf('-') === 0 || item.indexOf('--') === 0) {
+              rawArgv.push(item);
+              rawArgv.push(argvs[item]);
+            } else {
+              throw new Error(`must prefix with '-' or '--', but got ${item}`);
+            }
+          }
         }
       } else {
-        throw new Error('argvs error');
+        throw new TypeError('runArtisan argvs[1] must be array or object');
       }
     }
     const artisanObj = new artisanClass(rawArgv);
