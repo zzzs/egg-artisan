@@ -35,11 +35,11 @@ async function getMainCommand() {
 
           let target = require(path.join(fullPath, file));
           target.prototype.ctx = app.mockContext();
-
           this.add(name, target);
         }
       }
     }
+
   }
 
   return MainCommand;
