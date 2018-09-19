@@ -34,26 +34,27 @@ async function getMainCommand() {
           let target = require(path.join(fullPath, file));
 
           let artisanRun = target.prototype.run;
+          let callFn = target.prototype.helper.callFn;
 
-          target.prototype.run = async function () {
+          target.prototype.run = function* () {
             // before: ready
             let app = mm.app({
               baseDir: cmd
             });
-            await app.ready();
+            yield app.ready();
 
             // run
             this.ctx = app.mockContext();
             let result;
             try {
-              result = await artisanRun.apply(this, arguments);
+              yield callFn(artisanRun, arguments, this);
             } catch (err) {
-              await app.close();
+              yield app.close();
               throw err
             }
 
             // after: close
-            await app.close();
+            yield app.close();
             return result;
           };
 
