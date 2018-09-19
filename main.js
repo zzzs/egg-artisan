@@ -34,7 +34,6 @@ async function getMainCommand() {
           let target = require(path.join(fullPath, file));
 
           let artisanRun = target.prototype.run;
-          let callFn = target.prototype.helper.callFn;
 
           target.prototype.run = function* () {
             // before: ready
@@ -47,7 +46,7 @@ async function getMainCommand() {
             this.ctx = app.mockContext();
             let result;
             try {
-              yield callFn(artisanRun, arguments, this);
+              yield this.helper.callFn(artisanRun, arguments, this);
             } catch (err) {
               yield app.close();
               throw err
