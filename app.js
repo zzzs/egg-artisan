@@ -8,14 +8,17 @@ module.exports = app => {
     let rawArgv = artisanPath.split(' ');
     rawArgv = rawArgv.filter(item => item !== '');
 
+    // parse path
     artisanPath = rawArgv.shift();
-    artisanPath = path.basename(artisanPath);
 
     if (!path.isAbsolute(artisanPath)) {
+      artisanPath = path.basename(artisanPath);
       artisanPath = path.join(app.config.baseDir, 'app/artisan', artisanPath);
     }
     let artisanClass = require.resolve(artisanPath);
     artisanClass = require(artisanClass);
+
+    // parse rawArgv
     if (argvs) {
       if (is.array(argvs)) {
         argvs.forEach(item => {

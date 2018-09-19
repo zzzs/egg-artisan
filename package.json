@@ -44,8 +44,7 @@
     "app.js",
     "index.js",
     "main.js",
-    "bin",
-    "config"
+    "bin"
   ],
   "ci": {
     "version": "8, 9"
