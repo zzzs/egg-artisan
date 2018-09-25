@@ -20,4 +20,12 @@ describe('test/artisan.test.js', () => {
       .expect('hi, artisan')
       .expect(200);
   });
+
+  it('should GET /run', () => {
+    return app.httpRequest()
+      .get('/run')
+      .expect('hi, artisan')
+      .expect('aaaaa', 'bbbbbbb')
+      .expect(200);
+  });
 });

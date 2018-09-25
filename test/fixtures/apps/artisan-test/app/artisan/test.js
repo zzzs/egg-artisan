@@ -1,6 +1,6 @@
 'use strict';
 
-const Command = require('egg-artisan');
+const Command = require('../../../../../../');
 
 class CloneCommand extends Command {
   constructor(rawArgv) {
@@ -15,8 +15,10 @@ class CloneCommand extends Command {
     });
   }
 
-  run({ argv }) {
-    console.log('aaaaaaa', argv, this.ctx.app);
+  async run({ argv }) {
+    await this.ctx.set('aaaaa', 'bbbbbbb')
+console.log(1111111111, this.ctx.header)
+    // console.log('aaaaaaa', argv, this.ctx.app);
   }
 
   get description() {
