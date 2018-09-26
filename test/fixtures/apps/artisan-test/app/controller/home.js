@@ -26,6 +26,16 @@ class HomeController extends Controller {
     let con = await this.ctx.service.file.read();
     this.ctx.body = `${con}`;
   }
+
+  async run4() {
+    const params = this.ctx.params;
+    let obj = {};
+    obj[params.a] = true;
+    obj[params.b] = false;
+    await this.app.runArtisan('test', obj);
+    let con = await this.ctx.service.file.read();
+    this.ctx.body = `${con}`;
+  }
 }
 
 module.exports = HomeController;
