@@ -16,9 +16,10 @@ class CloneCommand extends Command {
   }
 
   async run({ argv }) {
-    await this.ctx.set('aaaaa', 'bbbbbbb')
-console.log(1111111111, this.ctx.header)
-    // console.log('aaaaaaa', argv, this.ctx.app);
+    const aa = argv.a || '';
+    const bb = argv.b || '';
+    const cc = argv._.join(',');
+    await this.ctx.service.file.write(`777777${aa}${bb}${cc}`);
   }
 
   get description() {

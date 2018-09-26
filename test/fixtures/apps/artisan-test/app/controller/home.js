@@ -7,9 +7,24 @@ class HomeController extends Controller {
     this.ctx.body = 'hi, ' + this.app.plugins.artisan.name;
   }
 
-  async run() {
+  async run1() {
     await this.app.runArtisan('test');
-    this.ctx.body = 'hi, ' + this.app.plugins.artisan.name;
+    let con = await this.ctx.service.file.read();
+    this.ctx.body = `${con}`;
+  }
+
+  async run2() {
+    const query = this.ctx.query;
+    await this.app.runArtisan('test', {'-a': query.a, '-b': query.b});
+    let con = await this.ctx.service.file.read();
+    this.ctx.body = `${con}`;
+  }
+
+  async run3() {
+    const params = this.ctx.params;
+    await this.app.runArtisan('test', [params.a, params.b]);
+    let con = await this.ctx.service.file.read();
+    this.ctx.body = `${con}`;
   }
 }
 

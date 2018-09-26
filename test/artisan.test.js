@@ -21,11 +21,31 @@ describe('test/artisan.test.js', () => {
       .expect(200);
   });
 
-  it('should GET /run', () => {
-    return app.httpRequest()
-      .get('/run')
-      .expect('hi, artisan')
-      .expect('aaaaa', 'bbbbbbb')
-      .expect(200);
+  describe('test/runArtisan', () => {
+    describe('exception', () => {
+
+    });
+
+    it('should GET /run', () => {
+      return app.httpRequest()
+        .get('/run1')
+        .expect('777777')
+        .expect(200);
+    });
+
+    it('should GET /run', () => {
+      return app.httpRequest()
+        .get('/run2?a=aaa&b=bbb')
+        .expect('777777aaabbb')
+        .expect(200);
+    });
+
+    it('should GET /run', () => {
+      return app.httpRequest()
+        .get('/run3/aaaa/bbbb')
+        .expect('777777aaaa,bbbb')
+        .expect(200);
+    });
+
   });
 });

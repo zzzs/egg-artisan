@@ -4,5 +4,7 @@ module.exports = app => {
   const { router, controller } = app;
 
   router.get('/', controller.home.index);
-  router.get('/run', controller.home.run);
+  router.get('/run1', controller.home.run1);
+  router.get('/run2', controller.home.run2);
+  router.get('/run3/:a/:b', controller.home.run3);
 };

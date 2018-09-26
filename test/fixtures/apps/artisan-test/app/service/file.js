@@ -1,18 +1,19 @@
 'use strict';
 
 const Service = require('egg').Service;
-const fs = require('fs');
+// const fs = require('fs');
 const path = require('path');
+const fs = require('mz/fs')
 
 class FileService extends Service {
-  async write(key) {
-    let file = path.resolve(this.app.config.static.dir, 'test');
-    return await fs.writeFile(file, 'hello');
+  async write(con) {
+    let file = path.resolve(this.app.config.static.dir, 'test.txt');
+    return await fs.writeFile(file, con);
   }
 
   async read() {
-    let file = path.resolve(this.app.config.static.dir);
-    return file;
+    let file = path.resolve(this.app.config.static.dir, 'test.txt');
+    return await fs.readFile(file);
   }
 }
 
