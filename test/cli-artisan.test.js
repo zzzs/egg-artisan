@@ -16,7 +16,7 @@ describe('test/cli-artisan.test.js', () => {
         // .debug()
         .expect('stdout', /Usage: egg-artisan <command> \[options]/)
         .expect('stdout', /clone.*Clone a repository into a new directory/)
-        .expect('stdout', /test.*test a repository into a new directory/)
+        .expect('stdout', /test.*test description/)
         .expect('stdout', /Options:/)
         .expect('stdout', /-h, --help.*/)
         .expect('stdout', /--version.*/)
@@ -33,32 +33,38 @@ describe('test/cli-artisan.test.js', () => {
         .end(done);
     });
 
-    // it('egg-artisan -h remote', done => {
-    //   coffee.fork(myBin, [ '-h', 'remote' ], { cwd })
-    //     // .debug()
-    //     .expect('stdout', /Usage: my-git remote/)
-    //     .expect('stdout', /add\s*Adds a remote/)
-    //     .expect('stdout', /remove\s*Remove the remote/)
-    //     .expect('code', 0)
-    //     .end(done);
-    // });
+    it('egg-artisan', done => {
+      coffee.fork(myBin, [], { cwd })
+        // .debug()
+        .expect('stdout', /Usage: egg-artisan <command> \[options]/)
+        .expect('stdout', /Options:/)
+        .expect('code', 0)
+        .end(done);
+    });
 
-    // it('my-git', done => {
-    //   coffee.fork(myBin, [], { cwd })
-    //     // .debug()
-    //     .expect('stdout', /Usage: my-git <command> \[options]/)
-    //     .expect('stdout', /Options:/)
-    //     .expect('code', 0)
-    //     .end(done);
-    // });
-
-    // it('my-git --version', done => {
-    //   coffee.fork(myBin, [ '--version' ], { cwd })
-    //     // .debug()
-    //     .expect('stdout', '2.0.0\n')
-    //     .expect('code', 0)
-    //     .end(done);
-    // });
+    it('egg-artisan test -h', done => {
+      coffee.fork(myBin, [ 'test', '-h' ], { cwd })
+        .debug()
+        .expect('stdout', /test command/)
+        .expect('stdout', /Options:/)
+        .expect('stdout', /-a.*test argv: a description/)
+        .expect('code', 0)
+        .end(done);
+    });
   });
+
+  // describe('command test', () => {
+
+  //   it('egg-artisan test -a=1', done => {
+  //     coffee.fork(myBin, [ 'test', '-a', '11111' ], { cwd })
+  //       .debug()
+  //       // .expect('stdout', /test command/)
+  //       // .expect('stdout', /Options:/)
+  //       // .expect('stdout', /-a.*test argv: a description/)
+  //       .expect('code', 0)
+  //       .end(done);
+  //   });
+
+  // });
 
 });

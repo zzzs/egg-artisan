@@ -2,15 +2,15 @@
 
 const Command = require('../../../../../../');
 
-class CloneCommand extends Command {
+class TestCommand extends Command {
   constructor(rawArgv) {
     super(rawArgv);
-    this.yargs.usage('test argv');
+    this.yargs.usage('test command');
 
     this.yargs.options({
-      depth: {
-        type: 'number',
-        description: 'Create a shallow clone with a history truncated to the specified number of commits',
+      a: {
+        type: 'string',
+        description: 'test argv: a description',
       },
     });
   }
@@ -23,8 +23,8 @@ class CloneCommand extends Command {
   }
 
   get description() {
-    return 'test a repository into a new directory';
+    return 'test description';
   }
 }
 
-module.exports = CloneCommand;
+module.exports = TestCommand;

@@ -1,7 +1,4 @@
 {
   "name": "artisan-test",
-  "version": "0.0.1",
-  "script": {
-    "artisan": "egg-artisan"
-  }
+  "version": "0.0.1"
 }
