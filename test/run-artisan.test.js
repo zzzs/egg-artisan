@@ -3,7 +3,7 @@
 const assert = require('assert');
 const mock = require('egg-mock');
 
-describe('test/artisan.test.js', () => {
+describe('test/run-artisan.test.js', () => {
   let app;
   before(() => {
     app = mock.app({
@@ -46,28 +46,28 @@ describe('test/artisan.test.js', () => {
     it('basic usage', () => {
       return app.httpRequest()
         .get('/run1')
-        .expect('777777')
+        .expect('argv: ')
         .expect(200);
     });
 
     it('param: object', () => {
       return app.httpRequest()
         .get('/run2?a=aaa&b=bbb')
-        .expect('777777aaabbb')
+        .expect('argv: aaabbb')
         .expect(200);
     });
 
     it('param: array', () => {
       return app.httpRequest()
         .get('/run3/aaaa/bbbb')
-        .expect('777777aaaa,bbbb')
+        .expect('argv: aaaa,bbbb')
         .expect(200);
     });
 
     it('param: object with value of boolean', () => {
       return app.httpRequest()
         .get('/run4/aaaa/bbbb')
-        .expect('777777aaaa')
+        .expect('argv: aaaa')
         .expect(200);
     });
 

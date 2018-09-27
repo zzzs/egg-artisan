@@ -5,7 +5,7 @@ const Command = require('../../../../../../');
 class CloneCommand extends Command {
   constructor(rawArgv) {
     super(rawArgv);
-    this.yargs.usage('test argv');
+    this.yargs.usage('clone <repository> [directory]');
 
     this.yargs.options({
       depth: {
@@ -15,15 +15,13 @@ class CloneCommand extends Command {
     });
   }
 
-  async run({ argv }) {
-    const aa = argv.a || '';
-    const bb = argv.b || '';
-    const cc = argv._.join(',');
-    await this.ctx.service.file.write(`argv: ${aa}${bb}${cc}`);
+  * run({ argv }) {
+    console.log(argv);
+    console.log('git clone %s to %s with depth %d', argv.repository, argv.directory, argv.depth);
   }
 
   get description() {
-    return 'test a repository into a new directory';
+    return 'Clone a repository into a new directory';
   }
 }
 
