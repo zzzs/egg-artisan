@@ -37,9 +37,7 @@ async function getMainCommand() {
 
           target.prototype.run = function* () {
             // before: ready
-            let app = mm.app({
-              baseDir: cmd
-            });
+            let app = mm.app();
             yield app.ready();
 
             // run

@@ -1,14 +1,12 @@
 'use strict';
 
 const assert = require('assert');
-const mock = require('egg-mock');
 const coffee = require('coffee');
 const path = require('path');
 
 describe('test/cli-artisan.test.js', () => {
   const myBin = require.resolve('../bin/egg-artisan.js');
   const cwd = path.join(__dirname, 'fixtures/apps/artisan-test');
-  // const repository = 'git@github.com:node-modules/common-bin';
 
   describe('global options', () => {
     it('egg-artisan --help', done => {
@@ -44,7 +42,7 @@ describe('test/cli-artisan.test.js', () => {
 
     it('egg-artisan test -h', done => {
       coffee.fork(myBin, [ 'test', '-h' ], { cwd })
-        .debug()
+        // .debug()
         .expect('stdout', /test command/)
         .expect('stdout', /Options:/)
         .expect('stdout', /-a.*test argv: a description/)
@@ -53,18 +51,18 @@ describe('test/cli-artisan.test.js', () => {
     });
   });
 
-  // describe('command test', () => {
+  describe('command test', () => {
 
-  //   it('egg-artisan test -a=1', done => {
-  //     coffee.fork(myBin, [ 'test', '-a', '11111' ], { cwd })
-  //       .debug()
-  //       // .expect('stdout', /test command/)
-  //       // .expect('stdout', /Options:/)
-  //       // .expect('stdout', /-a.*test argv: a description/)
-  //       .expect('code', 0)
-  //       .end(done);
-  //   });
+    // it('egg-artisan test -a=1', done => {
+    //   coffee.fork(myBin, [ 'test', '-a', '11111' ], { cwd })
+    //     .debug()
+    //     // .expect('stdout', /test command/)
+    //     // .expect('stdout', /Options:/)
+    //     // .expect('stdout', /-a.*test argv: a description/)
+    //     .expect('code', 0)
+    //     .end(done);
+    // });
 
-  // });
+  });
 
 });
