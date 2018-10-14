@@ -20,6 +20,9 @@ class TestCommand extends Command {
     const bb = argv.b || '';
     const cc = argv._.join(',');
     await this.ctx.service.file.write(`argv: ${aa}${bb}${cc}`);
+    let con = await this.ctx.service.file.read();
+    console.log('xxxx', con.toString())
+    return
   }
 
   get description() {

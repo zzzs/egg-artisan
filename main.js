@@ -3,10 +3,15 @@
 const path = require('path');
 const Command = require('common-bin');
 const fs = require('fs');
-const mm = require('egg-mock');
+// const mock = require('egg-mock');
+const detectPort = require('detect-port');
+const egg = require('egg');
+
 const assert = require('assert');
 
 const cmd = process.cwd();
+
+const MESSENGER = Symbol('messenger');
 
 async function getMainCommand() {
 
@@ -36,12 +41,34 @@ async function getMainCommand() {
           let artisanRun = target.prototype.run;
 
           target.prototype.run = function* () {
+            let options = {};
+            options.clusterPort = yield detectPort();
+
             // before: ready
-            let app = mm.app();
+            // let app = mock.app();
+            const Agent = egg.Agent;
+            const agent = new Agent(options);
+            yield agent.ready();
+
+            const app = new egg.Application(options);
+            // const Application = bindMessenger(egg.Application, agent);
+            // const app = new Application(options);
+            // console.log(33333333333)
+
+            // yield app.ready();
             yield app.ready();
 
+            // const msg = {
+            //   action: 'egg-ready',
+            //   data: options,
+            // };
+            // app.messenger._onMessage(msg);
+            // agent.messenger._onMessage(msg);
+            // console.log(1111111)
+
             // run
-            this.ctx = app.mockContext();
+            this.ctx = app.createAnonymousContext();
+            // this.ctx = app.mockContext();
             let result;
             try {
               yield this.helper.callFn(artisanRun, arguments, this);
@@ -65,3 +92,39 @@ async function getMainCommand() {
 }
 
 module.exports = getMainCommand;
+
+function bindMessenger(Application, agent) {
+  const agentMessenger = agent.messenger;
+  return class MessengerApplication extends Application {
+    constructor(options) {
+      super(options);
+
+      agentMessenger.send = new Proxy(agentMessenger.send, {
+        apply: this._sendMessage.bind(this),
+      });
+    }
+    _sendMessage(target, thisArg, [ action, data, to ]) {
+      const appMessenger = this.messenger;
+      setImmediate(() => {
+
+        if (to === 'app') {
+          appMessenger._onMessage({ action, data });
+        } else {
+          agentMessenger._onMessage({ action, data });
+        }
+      });
+    }
+    get messenger() {
+      return this[MESSENGER];
+    }
+    set messenger(m) {
+      m.send = new Proxy(m.send, {
+        apply: this._sendMessage.bind(this),
+      });
+      this[MESSENGER] = m;
+    }
+
+    // get [Symbol.for('egg#eggPath')]() { return path.join(__dirname, 'tmp'); }
+    get [Symbol.for('egg#eggPath')]() { return path.dirname(__dirname); }
+  };
+}
