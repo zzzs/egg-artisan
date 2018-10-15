@@ -3,7 +3,6 @@
 const path = require('path');
 const Command = require('common-bin');
 const fs = require('fs');
-// const mock = require('egg-mock');
 const detectPort = require('detect-port');
 const egg = require('egg');
 
@@ -45,7 +44,6 @@ async function getMainCommand() {
             options.clusterPort = yield detectPort();
 
             // before: ready
-            // let app = mock.app();
             const Agent = egg.Agent;
             const agent = new Agent(options);
             yield agent.ready();
@@ -53,9 +51,7 @@ async function getMainCommand() {
             const app = new egg.Application(options);
             // const Application = bindMessenger(egg.Application, agent);
             // const app = new Application(options);
-            // console.log(33333333333)
 
-            // yield app.ready();
             yield app.ready();
 
             // const msg = {
@@ -68,7 +64,7 @@ async function getMainCommand() {
 
             // run
             this.ctx = app.createAnonymousContext();
-            // this.ctx = app.mockContext();
+
             let result;
             try {
               yield this.helper.callFn(artisanRun, arguments, this);
@@ -78,12 +74,10 @@ async function getMainCommand() {
               throw err
             }
 
-
             // after: close
             yield agent.close();
             yield app.close();
             process.exit(0);
-            return result;
           };
 
           this.add(name, target);
@@ -128,7 +122,6 @@ function bindMessenger(Application, agent) {
       this[MESSENGER] = m;
     }
 
-    // get [Symbol.for('egg#eggPath')]() { return path.join(__dirname, 'tmp'); }
     get [Symbol.for('egg#eggPath')]() { return path.dirname(__dirname); }
   };
 }

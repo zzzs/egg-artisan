@@ -3,6 +3,10 @@
 const assert = require('assert');
 const coffee = require('coffee');
 const path = require('path');
+// const fs = require('fs');
+const fs = require('mz/fs');
+const copydir = require('copy-dir');
+
 
 describe('test/cli-artisan.test.js', () => {
   const myBin = require.resolve('../bin/egg-artisan.js');
@@ -52,6 +56,13 @@ describe('test/cli-artisan.test.js', () => {
   // });
 
   describe('command test', () => {
+    before(() => {
+      let src = path.join(process.cwd(), 'node_modules/egg-onerror');
+      let dst = path.join(cwd, 'node_modules/egg-onerror');
+      copydir.sync(src, dst);
+
+      // fs.createReadStream(src).pipe(fs.createWriteStream(dst));
+    });
 
     it('egg-artisan test -a=1', done => {
       coffee.fork(myBin, [ 'test', '-a', '11111' ], { cwd })
