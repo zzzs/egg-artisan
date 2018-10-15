@@ -70,6 +70,5 @@ describe('test/run-artisan.test.js', () => {
         .expect('argv: aaaa')
         .expect(200);
     });
-
   });
 });

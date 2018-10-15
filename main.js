@@ -73,12 +73,16 @@ async function getMainCommand() {
             try {
               yield this.helper.callFn(artisanRun, arguments, this);
             } catch (err) {
+              yield agent.close();
               yield app.close();
               throw err
             }
 
+
             // after: close
+            yield agent.close();
             yield app.close();
+            process.exit(0);
             return result;
           };
 
