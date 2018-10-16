@@ -10,8 +10,6 @@ const assert = require('assert');
 
 const cmd = process.cwd();
 
-const MESSENGER = Symbol('messenger');
-
 async function getMainCommand() {
 
   class MainCommand extends Command {
@@ -25,7 +23,7 @@ async function getMainCommand() {
 
     load(fullPath) {
       assert(fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory(),
-      `${fullPath} should exist and be a directory`);
+        `${fullPath} should exist and be a directory`);
 
       // load entire directory
       const files = fs.readdirSync(fullPath);
@@ -35,12 +33,12 @@ async function getMainCommand() {
           const name = path.basename(file).replace(/\.js$/, '');
           names.push(name);
 
-          let target = require(path.join(fullPath, file));
+          const target = require(path.join(fullPath, file));
 
-          let artisanRun = target.prototype.run;
+          const artisanRun = target.prototype.run;
 
           target.prototype.run = function* () {
-            let options = {};
+            const options = {};
             options.clusterPort = yield detectPort();
 
             // before: ready
@@ -65,13 +63,12 @@ async function getMainCommand() {
             // run
             this.ctx = app.createAnonymousContext();
 
-            let result;
             try {
               yield this.helper.callFn(artisanRun, arguments, this);
             } catch (err) {
               yield agent.close();
               yield app.close();
-              throw err
+              throw err;
             }
 
             // after: close
@@ -90,38 +87,3 @@ async function getMainCommand() {
 }
 
 module.exports = getMainCommand;
-
-function bindMessenger(Application, agent) {
-  const agentMessenger = agent.messenger;
-  return class MessengerApplication extends Application {
-    constructor(options) {
-      super(options);
-
-      agentMessenger.send = new Proxy(agentMessenger.send, {
-        apply: this._sendMessage.bind(this),
-      });
-    }
-    _sendMessage(target, thisArg, [ action, data, to ]) {
-      const appMessenger = this.messenger;
-      setImmediate(() => {
-
-        if (to === 'app') {
-          appMessenger._onMessage({ action, data });
-        } else {
-          agentMessenger._onMessage({ action, data });
-        }
-      });
-    }
-    get messenger() {
-      return this[MESSENGER];
-    }
-    set messenger(m) {
-      m.send = new Proxy(m.send, {
-        apply: this._sendMessage.bind(this),
-      });
-      this[MESSENGER] = m;
-    }
-
-    get [Symbol.for('egg#eggPath')]() { return path.dirname(__dirname); }
-  };
-}

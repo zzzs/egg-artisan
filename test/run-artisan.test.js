@@ -24,12 +24,12 @@ describe('test/run-artisan.test.js', () => {
 
   describe('test/runArtisan', () => {
     describe('exception', () => {
-      it(`must prefix with '-' or '--'`, async () => {
+      it("must prefix with '-' or '--'", async () => {
         try {
-          await app.runArtisan('test', {'a': 111});
+          await app.runArtisan('test', { a: 111 });
           throw new Error('another exception');
         } catch (err) {
-          assert(err.message.includes(`must prefix with '-' or '--', but got`));
+          assert(err.message.includes("must prefix with '-' or '--', but got"));
         }
       });
 

@@ -25,7 +25,8 @@ module.exports = app => {
           rawArgv.push(item);
         });
       } else if (is.object(argvs)) {
-        for (let item in argvs) {
+        let item;
+        for (item in argvs) {
           if (is.boolean(argvs[item])) {
             if (argvs[item]) {
               rawArgv.push(item);

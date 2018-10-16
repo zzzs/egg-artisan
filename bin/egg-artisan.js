@@ -4,5 +4,5 @@
 
 const getMainCommand = require('../main');
 getMainCommand().then(MainCommand => {
-    new MainCommand().start()
-})
+  new MainCommand().start();
+});
