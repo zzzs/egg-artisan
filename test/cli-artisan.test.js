@@ -3,10 +3,9 @@
 const assert = require('assert');
 const coffee = require('coffee');
 const path = require('path');
+const egg = require('egg');
 // const fs = require('fs');
 const fs = require('mz/fs');
-const copydir = require('copy-dir');
-
 
 describe('test/cli-artisan.test.js', () => {
   const myBin = require.resolve('../bin/egg-artisan.js');
@@ -56,12 +55,23 @@ describe('test/cli-artisan.test.js', () => {
   // });
 
   describe('command test', () => {
-    before(() => {
-      let src = path.join(process.cwd(), 'node_modules/egg-onerror');
-      let dst = path.join(cwd, 'node_modules/egg-onerror');
-      copydir.sync(src, dst);
+    before(async () => {
+      if (!await fs.exists(path.join(cwd, 'node_modules'))) {
+        await fs.mkdir(path.join(cwd, 'node_modules'));
+      }
 
-      // fs.createReadStream(src).pipe(fs.createWriteStream(dst));
+      const plugins = new egg.Application().plugins;
+      plugins.development = 1;
+      for (let key in plugins) {
+        let src = path.join(process.cwd(), 'node_modules/egg-' + key);
+        let dst = path.join(cwd, 'node_modules/egg-' + key);
+        await copydir(src, dst);
+      }
+    });
+
+    after(async () => {
+      let dst = path.join(cwd, 'node_modules');
+      await fs.unlink(dst);
     });
 
     it('egg-artisan test -a=1', done => {
@@ -75,3 +85,25 @@ describe('test/cli-artisan.test.js', () => {
   });
 
 });
+
+async function copy(src, dst) {
+  await fs.writeFile(dst, await fs.readFile(src));
+  // await fs.createReadStream(src).pipe(fs.createWriteStream(dst));
+}
+
+async function copydir(src, dst) {
+  const fsStat = await fs.stat(src);
+  if (fsStat.isDirectory()) {
+    if (!await fs.exists(path.join(dst))) {
+      await fs.mkdir(path.join(dst));
+    }
+    const files = await fs.readdirSync(src, 'utf-8');
+    for (var i = 0; i < files.length; i++) {
+      await copydir(path.join(src, files[i]), path.join(dst, files[i]));
+    }
+  } else {
+    await copy(src, dst);
+  }
+
+  return true;
+}
