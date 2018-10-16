@@ -3,7 +3,7 @@
 const egg = require('egg');
 const path = require('path');
 const Command = require('common-bin');
-const fs = require('mz/fs');
+const fs = require('fs');
 const detectPort = require('detect-port');
 const assert = require('assert');
 
