@@ -55,6 +55,7 @@ describe('test/cli-artisan.test.js', () => {
   });
 
   describe('command test', () => {
+    // 手动拷贝 node_modules
     before(async () => {
       if (!await fs.exists(path.join(cwd, 'node_modules'))) {
         await fs.mkdir(path.join(cwd, 'node_modules'));
@@ -70,27 +71,72 @@ describe('test/cli-artisan.test.js', () => {
     });
 
     after(function* () {
-      const dst = path.join(cwd, 'node_modules');
-      yield del([ dst ]);
-      // await fs.unlink(dst);
+      yield del([ path.join(cwd, 'node_modules') ]);
     });
 
-    it('egg-artisan test -a=1', done => {
-      coffee.fork(myBin, [ 'test', '-a', '11111' ], { cwd })
-        .debug()
-        .expect('stdout', /argv: 11111/)
-        .expect('code', 0)
-        .end(done);
+    describe('egg-artisan test', () => {
+      it('egg-artisan test -a hello', done => {
+        coffee.fork(myBin, [ 'test', '-a', 'hello' ], { cwd })
+          // .debug()
+          .expect('stdout', /argv: hello/)
+          .expect('code', 0)
+          .end(done);
+      });
+
+      it('egg-artisan test -a=hello', done => {
+        coffee.fork(myBin, [ 'test', '-a=hello' ], { cwd })
+          // .debug()
+          .expect('stdout', /argv: hello/)
+          .expect('code', 0)
+          .end(done);
+      });
+
+      it('egg-artisan test --a hello', done => {
+        coffee.fork(myBin, [ 'test', '--a', 'hello' ], { cwd })
+          // .debug()
+          .expect('stdout', /argv: hello/)
+          .expect('code', 0)
+          .end(done);
+      });
+
+      it('egg-artisan test --a=hello', done => {
+        coffee.fork(myBin, [ 'test', '--a=hello' ], { cwd })
+          // .debug()
+          .expect('stdout', /argv: hello/)
+          .expect('code', 0)
+          .end(done);
+      });
+
+      it('egg-artisan test -a=hello -b=world', done => {
+        coffee.fork(myBin, [ 'test', '-a=hello', '-b=world' ], { cwd })
+          // .debug()
+          .expect('stdout', /argv: helloworld/)
+          .expect('code', 0)
+          .end(done);
+      });
+
+      it('egg-artisan test --a=hello --b=world', done => {
+        coffee.fork(myBin, [ 'test', '-a=hello', '-b=world' ], { cwd })
+          // .debug()
+          .expect('stdout', /argv: helloworld/)
+          .expect('code', 0)
+          .end(done);
+      });
+
+      it('egg-artisan test hello world', done => {
+        coffee.fork(myBin, [ 'test', 'hello', 'world' ], { cwd })
+          // .debug()
+          .expect('stdout', /argv: hello,world/)
+          .expect('code', 0)
+          .end(done);
+      });
+
     });
 
   });
-
 });
 
-async function copy(src, dst) {
-  await fs.writeFile(dst, await fs.readFile(src));
-}
-
+// 异步递归拷贝目录
 async function copydir(src, dst) {
   const fsStat = await fs.stat(src);
   if (fsStat.isDirectory()) {
@@ -106,4 +152,8 @@ async function copydir(src, dst) {
   }
 
   return true;
+}
+
+async function copy(src, dst) {
+  await fs.writeFile(dst, await fs.readFile(src));
 }

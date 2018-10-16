@@ -1,11 +1,10 @@
 'use strict';
 
+const egg = require('egg');
 const path = require('path');
 const Command = require('common-bin');
-const fs = require('fs');
+const fs = require('mz/fs');
 const detectPort = require('detect-port');
-const egg = require('egg');
-
 const assert = require('assert');
 
 const cmd = process.cwd();
@@ -51,14 +50,6 @@ async function getMainCommand() {
             // const app = new Application(options);
 
             yield app.ready();
-
-            // const msg = {
-            //   action: 'egg-ready',
-            //   data: options,
-            // };
-            // app.messenger._onMessage(msg);
-            // agent.messenger._onMessage(msg);
-            // console.log(1111111)
 
             // run
             this.ctx = app.createAnonymousContext();
