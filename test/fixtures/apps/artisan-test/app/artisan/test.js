@@ -22,7 +22,7 @@ class TestCommand extends Command {
     await this.ctx.service.file.write(`argv: ${aa}${bb}${cc}`);
     const con = await this.ctx.service.file.read();
     console.log(con.toString());
-    return;
+    return con;
   }
 
   get description() {

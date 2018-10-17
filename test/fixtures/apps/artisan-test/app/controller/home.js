@@ -1,6 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const path = require('path');
 
 class HomeController extends Controller {
   async index() {
@@ -15,7 +16,9 @@ class HomeController extends Controller {
 
   async run2() {
     const query = this.ctx.query;
-    await this.app.runArtisan('test', { '-a': query.a, '-b': query.b });
+
+    const absolutePath = path.join(this.ctx.app.config.baseDir, 'app/artisan/test');
+    await this.app.runArtisan(absolutePath, { '-a': query.a, '-b': query.b });
     const con = await this.ctx.service.file.read();
     this.ctx.body = `${con}`;
   }
@@ -35,6 +38,15 @@ class HomeController extends Controller {
     await this.app.runArtisan('test', obj);
     const con = await this.ctx.service.file.read();
     this.ctx.body = `${con}`;
+  }
+
+  async run5() {
+    try {
+      await this.app.runArtisan('throww');
+      this.ctx.body = 'ok';
+    } catch (err) {
+      this.ctx.body = err.message;
+    }
   }
 }
 
