@@ -46,9 +46,6 @@ async function getMainCommand() {
             yield agent.ready();
 
             const app = new egg.Application(options);
-            // const Application = bindMessenger(egg.Application, agent);
-            // const app = new Application(options);
-
             yield app.ready();
 
             // run

@@ -130,7 +130,27 @@ describe('test/cli-artisan.test.js', () => {
           .expect('code', 0)
           .end(done);
       });
+    });
 
+    describe('egg-artisan clone', () => {
+      const repository = 'git@github.com:zzzs/egg-artisan.git';
+
+      it('egg-artisan clone --help', done => {
+        coffee.fork(myBin, [ 'clone', '--help' ], { cwd })
+          // .debug()
+          .expect('stdout', /Options:/)
+          .expect('stdout', /--depth\s*Create a shallow.*\[.*?]/)
+          .expect('code', 0)
+          .end(done);
+      });
+
+      it('egg-artisan clone <repository> [directory] [depth]', done => {
+        coffee.fork(myBin, [ 'clone', '--repository', repository, '--directory=/home', '--depth', '1' ], { cwd })
+          // .debug()
+          .expect('stdout', /git clone git@github\.com\:zzzs\/egg-artisan\.git to \/home with depth 1/)
+          .expect('code', 0)
+          .end(done);
+      });
     });
 
   });

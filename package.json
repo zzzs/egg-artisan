@@ -11,17 +11,17 @@
     "egg-plugin"
   ],
   "dependencies": {
-    "common-bin": "^2.7.3",
-    "is-type-of": "^1.2.0"
+    "common-bin": "^2.8.0",
+    "is-type-of": "^1.2.1"
   },
   "devDependencies": {
     "autod": "^3.0.0",
     "autod-egg": "^1.0.0",
     "coffee": "^5.1.0",
     "del": "^3.0.0",
-    "egg": "^2.0.0",
-    "egg-bin": "^4.3.0",
-    "egg-ci": "^1.8.0",
+    "egg": "^2.12.0",
+    "egg-bin": "^4.9.0",
+    "egg-ci": "^1.9.2",
     "egg-mock": "^3.20.1",
     "eslint": "^4.11.0",
     "eslint-config-egg": "^5.1.0",
