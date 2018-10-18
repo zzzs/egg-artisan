@@ -1,6 +1,6 @@
 {
   "name": "egg-artisan",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "artisan cli for egg",
   "eggPlugin": {
     "name": "artisan"

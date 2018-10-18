@@ -2,9 +2,12 @@
 
 const is = require('is-type-of');
 const path = require('path');
+const assert = require('assert');
 
 module.exports = app => {
   app.runArtisan = async (artisanPath, argvs) => {
+    assert(is.string(artisanPath), `runArtisan: artisanCommand must be string, but got ${artisanPath}`);
+
     let rawArgv = artisanPath.split(' ');
     rawArgv = rawArgv.filter(item => item !== '');
 

@@ -24,6 +24,15 @@ describe('test/run-artisan.test.js', () => {
 
   describe('test/runArtisan', () => {
     describe('exception', () => {
+      it('runArtisan: artisanCommand must be string, but got', async () => {
+        try {
+          await app.runArtisan();
+          throw new Error('another exception');
+        } catch (err) {
+          assert(err.message.includes('runArtisan: artisanCommand must be string, but got'));
+        }
+      });
+
       it("must prefix with '-' or '--'", async () => {
         try {
           await app.runArtisan('test', { a: 111 });
