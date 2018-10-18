@@ -7,3 +7,5 @@ run/
 .DS_Store
 *.swp
 package-lock.json
+.nyc_output
+package-lock.json

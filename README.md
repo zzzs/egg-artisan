@@ -40,20 +40,20 @@ exports.artisan = {
 
 ## Features
 
-> `egg-artisan` provides a cli running mode for egg. In the root directory, you can do something by executing commands like `npm run artisan xxx`, such as manipulating database scripts, updating cache scripts, etc.
+> `egg-artisan` provides a cli running mode for egg. In the root directory, you can do something by executing commands like `npm run artisan xxx`, such as operating file, manipulating database scripts, updating cache scripts, etc.
 
 `egg-artisan` based on [common-bin](https://github.com/node-modules/common-bin)(based on [yargs](https://github.com/yargs/yargs)), to provide more convenient usage, as detailed below.
 
 ## Usage
 
-`egg-artisan` requires cli file to be stored in `app/artisan`, as shown below, `clone.js`, `test.js`.
+`egg-artisan` requires cli file to be stored in `app/artisan`, as shown below, `test.js`, `clone.js`.
 
 ```
     egg-project
     ├── app
     │   ├── artisan
-    │   |   ├── clone.js
-    │   |   └── test.js
+    │   |   ├── test.js
+    │   |   └── clone.js
     │   ├── controller
     |   ├── router.js
     |   | ...
@@ -61,12 +61,12 @@ exports.artisan = {
     ├── config
     ├── test
     ├── app.js (可选)
+    ├── ...
 
 ```
 
 ### How to write command
 Let's take test.js as an example, for the file operation.
-
 
 As you can see, the usage of the command is the same as that of `common-bin`, because `egg-artisan` extends `common-bin`. In addition, `egg-artisan` injected **`ths.ctx`** into the run method, so you can get anonymous context with **`ths.ctx`**.
 
@@ -98,7 +98,7 @@ class TestCommand extends Command {
     const cc = argv._.join(',');
     await this.ctx.service.file.write(`argv: ${aa}${bb}${cc}`);
     const con = await this.ctx.service.file.read();
-    console.log(con.toString());
+    console.log('argv', argv);
     return con;
   }
 
@@ -122,53 +122,41 @@ module.exports = TestCommand;
 
 ### Run the test command
 
+- Show help, the following image has 2 custom commands: `test.js`, `clone.js`.
 ```bash
-npm run artisan
+$ npm run artisan
 // The following is the same
-// npm run artisan -h
-// npm run artisan help
+// npm run artisan -- -h
+// npm run artisan -- help
 ```
+> Why use `--` ? you can see [http://www.ruanyifeng.com/blog/2016/10/npm_scripts.html](http://www.ruanyifeng.com/blog/2016/10/npm_scripts.html).
 
-The following figure has three commands: `test.js`, `test2.js`, `test3.js`.
+    ![](./img/1.png)
 
-// todo figure
-
-Why use `--`, you can see [http://www.ruanyifeng.com/blog/2016/10/npm_scripts.html](http://www.ruanyifeng.com/blog/2016/10/npm_scripts.html).
-
+- Show `test.js` command help
 ```bash
-npm run artisan -- test -h
+$ npm run artisan -- test -h
 // The following is the same
 // npm run artisan -- test help
 ```
-// todo figure
+![](./img/2.png)
 
-
+- Run `test.js` command
 ```bash
-npm run artisan -- test -a=1 -b=2
+$ npm run artisan -- test -x=1 --type=2 a b
 
 // The following is the same
-// npm run artisan -- test -a=1 -b 2
-// npm run artisan -- test --a=1 --b=2
+// npm run artisan -- test -x=1 --type 2 a b
+// npm run artisan -- test -x 1 --type 2 a b
 ```
+![](./img/3.png)
 
-
-// todo figure
-
-
-
-```js
-// {app_root}/config/plugin.js
-exports.artisan = {
-  enable: true,
-  package: 'egg-artisan',
-};
-```
 
 ### Call the artisan command inside the project
-`egg-artisan` provides `app.runArtisan(artisanCommand, [argvs])` for executing some commands inside the project. `app.runArtisan(artisanName, [argvs])` accepts two parameters:
+`egg-artisan` provides `app.runArtisan(artisanCommand, [argvs])` for running some commands inside the project. `app.runArtisan(artisanName, [argvs])` accepts two parameters:
  
- - artisanCommand: Relative path or absolute path in the app/artisan directory, such as `test`, `{app_root}/app/artisan/test`; You can also append parameters, such as `test -a=1 --b=2`, `{app_root}/app/artisan/test -a=1 --b=2`.
- - argvs: command argvs, will be parsed and appended to `artisanCommand`. support object, array, such as `[ 'a', 'b' ]`, `{ -a: 1, --b: 2 }`, `{ a: true, --b: 2 }`.
+ - artisanCommand: Relative path or absolute path in the app/artisan directory, such as `test`, `{app_root}/app/artisan/test`; You can also append parameters, such as `test -x=1 --type=2`, `{app_root}/app/artisan/test -x=1 --type=2`.
+ - argvs: command argvs, will be parsed and appended to `artisanCommand`. support object, array, such as `[ 'a', 'b' ]`, `{ '--a': 1, '--b': 2 }`, `{ a: true, '--b': 2 }`.
 
 
 Example:
@@ -181,7 +169,7 @@ const BaseController = require('./base');
 
 class HomeController extends BaseController {
   async index() {
-    await this.app.runArtisan('test', { -a: 1 })
+    await this.app.runArtisan('test', { '-a': 1 })
 }
 
 module.exports = HomeController;
@@ -195,16 +183,20 @@ app.runArtisan('test')
 
 npm run artisan -- test -a=1
 app.runArtisan('test -a=1')
-app.runArtisan('test', { -a: 1 })
+app.runArtisan('test', { '-a': 1 })
+
+npm run artisan -- test a b
+app.runArtisan('test a b')
+app.runArtisan('test', [ 'a', 'b' ])
 
 npm run artisan -- test -a=1 --bb=2
 app.runArtisan('test -a=1 --bb=2')
-app.runArtisan('test', { -a: 1, --bb: 2 })
+app.runArtisan('test', { '-a': 1, '--bb': 2 })
 
 npm run artisan -- test -a=1 --bb=2 cc
 app.runArtisan('test -a=1 --bb=2 cc')
-app.runArtisan('test -a=1', { --bb: 2, cc: true })
-app.runArtisan('test', { -a: 1, --bb: 2, cc: true })
+app.runArtisan('test -a=1', { '--bb': 2, cc: true })
+app.runArtisan('test', { '-a': 1, '--bb': 2, cc: true })
 
 ```
 
@@ -222,7 +214,7 @@ app.runArtisan('test', { -a: 1, --bb: 2, cc: true })
         };
       }
       async subscribe(data) {
-        await this.ctx.app.runArtisan('test', { -a: 1 });
+        await this.ctx.app.runArtisan('test', { '-a': 1 });
       }
     }
     ```
