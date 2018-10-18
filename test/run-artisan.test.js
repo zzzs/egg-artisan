@@ -41,6 +41,13 @@ describe('test/run-artisan.test.js', () => {
           assert(err.message.includes('runArtisan argvs[1] must be array or object'));
         }
       });
+
+      it('runArtisan throw a exception', async () => {
+        return app.httpRequest()
+          .get('/run5')
+          .expect('it is a error')
+          .expect(200);
+      });
     });
 
     it('basic usage', () => {

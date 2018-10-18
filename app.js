@@ -10,7 +10,6 @@ module.exports = app => {
 
     // parse path
     artisanPath = rawArgv.shift();
-
     if (!path.isAbsolute(artisanPath)) {
       artisanPath = path.basename(artisanPath);
       artisanPath = path.join(app.config.baseDir, 'app/artisan', artisanPath);

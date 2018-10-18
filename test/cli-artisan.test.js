@@ -1,6 +1,5 @@
 'use strict';
 
-const assert = require('assert');
 const coffee = require('coffee');
 const path = require('path');
 const egg = require('egg');
@@ -10,6 +9,16 @@ const del = require('del');
 describe('test/cli-artisan.test.js', () => {
   const myBin = require.resolve('../bin/egg-artisan.js');
   const cwd = path.join(__dirname, 'fixtures/apps/artisan-test');
+  const emptyCwd = path.join(__dirname, 'fixtures/apps/empty-artisan-test');
+
+  describe('no dir: app/artisan', () => {
+    it('egg-artisan --help', done => {
+      // UnhandledPromiseRejectionWarning
+      coffee.fork(myBin, [ '--help' ], { cwd: emptyCwd })
+        // .debug()
+        .end(done);
+    });
+  });
 
   describe('global options', () => {
     it('egg-artisan --help', done => {
@@ -17,7 +26,10 @@ describe('test/cli-artisan.test.js', () => {
         // .debug()
         .expect('stdout', /Usage: egg-artisan <command> \[options]/)
         .expect('stdout', /clone.*Clone a repository into a new directory/)
+        .expect('stdout', /clone/)
         .expect('stdout', /test.*test description/)
+        .expect('stdout', /simple/)
+        .expect('stdout', /throw/)
         .expect('stdout', /Options:/)
         .expect('stdout', /-h, --help.*/)
         .expect('stdout', /--version.*/)
@@ -153,6 +165,44 @@ describe('test/cli-artisan.test.js', () => {
       });
     });
 
+    describe('egg-artisan simple', () => {
+      it('egg-artisan simple --help', done => {
+        coffee.fork(myBin, [ 'simple', '--help' ], { cwd })
+          // .debug()
+          .expect('stdout', /Options:/)
+          .expect('stdout', /simple command/)
+          .expect('code', 0)
+          .end(done);
+      });
+
+      it('egg-artisan simple [type]', done => {
+        coffee.fork(myBin, [ 'simple', '--type', 'info' ], { cwd })
+          // .debug()
+          .expect('stdout', /simple type: info/)
+          .expect('code', 0)
+          .end(done);
+      });
+    });
+
+    describe('egg-artisan throww', () => {
+      it('egg-artisan throww --help', done => {
+        coffee.fork(myBin, [ 'throww', '--help' ], { cwd })
+          // .debug()
+          .expect('stdout', /Options:/)
+          .expect('stdout', /throw command/)
+          .expect('code', 0)
+          .end(done);
+      });
+
+      it('egg-artisan throww [type]', done => {
+      // UnhandledPromiseRejectionWarning
+        coffee.fork(myBin, [ 'throww', '--type', 'info' ], { cwd })
+          // .debug()
+          // .expect('stdout', /throww type: info/)
+          // .expect('code', 0)
+          .end(done);
+      });
+    });
   });
 });
 
