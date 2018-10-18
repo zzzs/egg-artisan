@@ -20,9 +20,9 @@
 [download-image]: https://img.shields.io/npm/dm/egg-artisan.svg?style=flat-square
 [download-url]: https://npmjs.org/package/egg-artisan
 
-<!--
-Description here.
--->
+
+A cli plugin for egg, named artisan, based on [common-bin](https://github.com/node-modules/common-bin).
+
 
 ## Install
 
@@ -30,7 +30,7 @@ Description here.
 $ npm i egg-artisan --save
 ```
 
-## Usage
+## Mount
 
 ```js
 // {app_root}/config/plugin.js
@@ -40,7 +40,31 @@ exports.artisan = {
 };
 ```
 
-## Configuration
+## Features
+
+> `egg-artisan` provides a cli running mode for egg. In the root directory, you can do something by executing commands like `npm run artisan xxx`, such as manipulating database scripts, updating cache scripts, etc.
+
+`egg-artisan` based on [common-bin](https://github.com/node-modules/common-bin)(based on [yargs](https://github.com/yargs/yargs)), to provide more convenient usage, as detailed below.
+
+## Usage
+
+`egg-artisan` requires cli file to be stored in `app/artisan`, as shown below, `clone.js`, `test.js`.
+
+```
+    egg-project
+    ├── app
+    │   ├── artisan
+    │   |   ├── clone.js
+    │   |   └── test.js
+    │   ├── controller
+    |   ├── router.js
+    |   | ...
+    ├── package.json
+    ├── config
+    ├── test
+    ├── app.js (可选)
+
+```
 
 ```js
 // {app_root}/config/config.default.js
